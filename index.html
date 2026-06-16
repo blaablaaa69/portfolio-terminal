@@ -4,519 +4,66 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Portfolio Terminal</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:#080c12; --bg1:#0c1118; --bg2:#101620; --bg3:#141c2a;
-  --border:#1a2840; --border2:#243650;
-  --accent:#f0a500; --blue:#2a7fff; --green:#00d492; --red:#ff3d5a;
-  --purple:#9d6fff; --dim:#2a4060; --muted:#4a6888; --sub:#7090b0;
-  --text:#b8cce0; --bright:#ddeeff;
-  --mono:'IBM Plex Mono',monospace; --sans:'IBM Plex Sans',sans-serif;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;overflow:hidden;}
-body{background:var(--bg);color:var(--text);font-family:var(--mono);font-size:11px;display:flex;flex-direction:column;height:100vh;}
-::-webkit-scrollbar{width:3px;height:3px;}
-::-webkit-scrollbar-track{background:var(--bg);}
-::-webkit-scrollbar-thumb{background:var(--dim);border-radius:2px;}
-
-/* TOP BAR */
-#topbar{display:flex;align-items:center;justify-content:space-between;background:var(--bg1);border-bottom:1px solid var(--border);padding:0 16px;height:38px;flex-shrink:0;}
-.logo{font-family:var(--sans);font-weight:700;font-size:13px;color:var(--accent);letter-spacing:3px;display:flex;align-items:center;gap:10px;}
-.logo-sep{width:1px;height:16px;background:var(--border2);}
-.logo-sub{color:var(--muted);font-size:10px;font-weight:400;letter-spacing:1px;font-family:var(--mono);}
-#market-pill{display:flex;align-items:center;gap:5px;padding:3px 10px;border-radius:2px;font-size:10px;font-weight:600;letter-spacing:0.8px;}
-.pill-open{background:rgba(0,212,146,0.12);color:var(--green);border:1px solid rgba(0,212,146,0.25);}
-.pill-closed{background:rgba(255,61,90,0.10);color:var(--red);border:1px solid rgba(255,61,90,0.2);}
-.pill-dot{width:5px;height:5px;border-radius:50%;}
-.open-dot{background:var(--green);animation:blink 2s infinite;}
-.closed-dot{background:var(--red);}
-@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
-#clock{color:var(--bright);font-size:12px;font-weight:500;min-width:85px;text-align:center;}
-.topbar-right{display:flex;align-items:center;gap:12px;}
-#last-update{color:var(--muted);font-size:10px;}
-#refresh-btn{background:transparent;border:1px solid var(--border2);color:var(--sub);font-family:var(--mono);font-size:10px;padding:4px 12px;cursor:pointer;letter-spacing:0.5px;transition:all 0.15s;border-radius:2px;}
-#refresh-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent);}
-#refresh-btn:disabled{opacity:0.35;cursor:not-allowed;}
-.spin-icon{display:inline-block;}
-.spinning{animation:spin 0.8s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg);}}
-
-/* SUMMARY */
-#summary{display:grid;grid-template-columns:repeat(6,1fr);border-bottom:1px solid var(--border);background:var(--bg1);flex-shrink:0;}
-.sum-card{padding:10px 16px;border-right:1px solid var(--border);}
-.sum-card:last-child{border-right:none;}
-.sum-label{color:var(--muted);font-size:9px;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:3px;}
-.sum-value{font-size:17px;font-weight:600;color:var(--bright);line-height:1;}
-.sum-sub{font-size:10px;margin-top:3px;color:var(--muted);}
-
-/* TAPE */
-#tape-wrap{background:var(--bg3);border-bottom:1px solid var(--border);height:24px;overflow:hidden;flex-shrink:0;position:relative;}
-#tape-wrap::before,#tape-wrap::after{content:'';position:absolute;top:0;bottom:0;width:40px;z-index:2;}
-#tape-wrap::before{left:0;background:linear-gradient(to right,var(--bg3),transparent);}
-#tape-wrap::after{right:0;background:linear-gradient(to left,var(--bg3),transparent);}
-#tape{display:flex;white-space:nowrap;animation:scroll-tape 90s linear infinite;padding:4px 0;width:max-content;}
-#tape:hover{animation-play-state:paused;}
-@keyframes scroll-tape{from{transform:translateX(0);}to{transform:translateX(-50%);}}
-.ti{display:inline-flex;align-items:center;gap:5px;padding:0 18px;border-right:1px solid var(--border);}
-.ti-sym{color:var(--accent);font-weight:700;font-size:10px;}
-.ti-px{color:var(--bright);font-size:10px;}
-.ti-chg{font-size:9px;}
-
-/* MAIN */
-#main{display:grid;grid-template-columns:1fr 280px;flex:1;overflow:hidden;}
-
-/* TABLE */
-#table-panel{display:flex;flex-direction:column;overflow:hidden;border-right:1px solid var(--border);}
-.panel-tabs{display:flex;align-items:center;background:var(--bg1);border-bottom:1px solid var(--border);padding:0 12px;height:34px;gap:2px;flex-shrink:0;}
-.tab{padding:0 12px;height:100%;display:flex;align-items:center;font-size:10px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;letter-spacing:0.5px;transition:all 0.15s;}
-.tab:hover{color:var(--text);}
-.tab.active{color:var(--accent);border-bottom-color:var(--accent);}
-.tab-spacer{flex:1;}
-#search-input{background:var(--bg3);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:10px;padding:3px 8px;outline:none;width:130px;}
-#search-input:focus{border-color:var(--blue);}
-#search-input::placeholder{color:var(--dim);}
-#table-scroll{overflow-y:auto;flex:1;}
-table{width:100%;border-collapse:collapse;}
-thead th{background:var(--bg2);color:var(--muted);font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:6px 10px;text-align:right;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:5;cursor:pointer;white-space:nowrap;user-select:none;}
-thead th:first-child{text-align:left;}
-thead th:hover{color:var(--accent);}
-thead th.sort-asc::after{content:' ▲';color:var(--accent);}
-thead th.sort-desc::after{content:' ▼';color:var(--accent);}
-tbody tr{border-bottom:1px solid rgba(26,40,64,0.6);cursor:pointer;transition:background 0.08s;}
-tbody tr:hover{background:rgba(42,127,255,0.05);}
-tbody tr.selected{background:rgba(240,165,0,0.06)!important;border-left:2px solid var(--accent);}
-tbody tr.flash-g{animation:fg 0.6s;}
-tbody tr.flash-r{animation:fr 0.6s;}
-@keyframes fg{50%{background:rgba(0,212,146,0.15);}}
-@keyframes fr{50%{background:rgba(255,61,90,0.12);}}
-td{padding:6px 10px;text-align:right;font-size:11px;white-space:nowrap;}
-td:first-child{text-align:left;}
-.sym{color:var(--accent);font-weight:600;font-size:11px;}
-.sname{color:var(--dim);font-size:9px;margin-top:1px;}
-.pos{color:var(--green);} .neg{color:var(--red);} .neu{color:var(--muted);} .dimtxt{color:var(--dim);}
-.bar-wrap{display:flex;align-items:center;gap:5px;justify-content:flex-end;}
-.pnl-bar{height:3px;border-radius:1px;min-width:1px;flex-shrink:0;}
-.loading-row td{color:var(--dim);text-align:center;padding:30px;}
-
-/* RIGHT */
-#right-panel{display:flex;flex-direction:column;overflow:hidden;background:var(--bg1);}
-#detail{padding:14px;border-bottom:1px solid var(--border);flex-shrink:0;}
-.detail-empty{color:var(--dim);font-size:11px;padding:30px 0;text-align:center;}
-.det-sym{font-size:20px;font-weight:700;color:var(--accent);}
-.det-name{color:var(--muted);font-size:9px;margin-top:2px;letter-spacing:0.5px;}
-.det-price{font-size:24px;font-weight:300;color:var(--bright);text-align:right;}
-.det-chg{font-size:11px;font-weight:600;text-align:right;margin-top:2px;}
-hr.det-div{border:none;border-top:1px solid var(--border);margin:10px 0;}
-.det-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.det-item .dl{color:var(--muted);font-size:8px;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:2px;}
-.det-item .dv{color:var(--bright);font-size:11px;font-weight:500;}
-#alloc{padding:12px 14px;flex:1;overflow-y:auto;}
-.alloc-title{color:var(--muted);font-size:9px;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);}
-.alloc-row{display:flex;align-items:center;gap:7px;margin-bottom:7px;}
-.alloc-sym{color:var(--text);font-size:10px;font-weight:500;width:48px;flex-shrink:0;}
-.alloc-track{flex:1;height:3px;background:var(--bg3);border-radius:1px;overflow:hidden;}
-.alloc-fill{height:100%;border-radius:1px;}
-.alloc-pct{color:var(--muted);font-size:9px;width:32px;text-align:right;flex-shrink:0;}
-
-/* STATUS */
-#statusbar{display:flex;align-items:center;gap:16px;background:var(--bg2);border-top:1px solid var(--border);padding:3px 14px;height:22px;flex-shrink:0;font-size:9px;color:var(--muted);letter-spacing:0.3px;}
-.st-ok{color:var(--green);} .st-err{color:var(--red);} .st-warn{color:var(--accent);} .st-sep{color:var(--border2);}
-
-/* LOADING OVERLAY */
-#loading-overlay{position:fixed;inset:0;background:rgba(8,12,18,0.85);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:12px;}
-#loading-overlay.hidden{display:none;}
-.ld-spinner{font-size:28px;animation:spin 1s linear infinite;color:var(--accent);}
-.ld-msg{color:var(--text);font-size:12px;letter-spacing:1px;}
-.ld-sub{color:var(--muted);font-size:10px;}
+/* ... (Keep all your existing CSS here) ... */
 </style>
 </head>
 <body>
-
-<div id="loading-overlay">
-  <div class="ld-spinner">◌</div>
-  <div class="ld-msg">FETCHING LIVE PRICES</div>
-  <div class="ld-sub" id="ld-sub">Connecting to market data…</div>
-</div>
-
-<div id="topbar">
-  <div class="logo">TERMINAL<div class="logo-sep"></div><span class="logo-sub">SCHWAB · LIVE</span></div>
-  <div style="display:flex;align-items:center;gap:8px;">
-    <div id="market-pill" class="pill-closed"><div class="pill-dot closed-dot"></div><span id="market-label">MARKET CLOSED</span></div>
-    <div id="clock">--:--:-- ET</div>
-  </div>
-  <div class="topbar-right">
-    <span id="last-update">Not loaded</span>
-    <button id="refresh-btn" onclick="doRefresh()"><span class="spin-icon" id="spin-icon">↻</span> REFRESH</button>
-  </div>
-</div>
-
-<div id="summary">
-  <div class="sum-card"><div class="sum-label">Portfolio Value</div><div class="sum-value" id="sv-value">—</div><div class="sum-sub" id="sv-cost">—</div></div>
-  <div class="sum-card"><div class="sum-label">Day P&amp;L</div><div class="sum-value" id="sv-daypnl">—</div><div class="sum-sub" id="sv-daypct">—</div></div>
-  <div class="sum-card"><div class="sum-label">Total P&amp;L</div><div class="sum-value" id="sv-totalpnl">—</div><div class="sum-sub" id="sv-totalpct">—</div></div>
-  <div class="sum-card"><div class="sum-label">Day Winners</div><div class="sum-value pos" id="sv-win">—</div><div class="sum-sub">up today</div></div>
-  <div class="sum-card"><div class="sum-label">Day Losers</div><div class="sum-value neg" id="sv-lose">—</div><div class="sum-sub">down today</div></div>
-  <div class="sum-card"><div class="sum-label">Positions</div><div class="sum-value" style="color:var(--sub)">39</div><div class="sum-sub">active holdings</div></div>
-</div>
-
-<div id="tape-wrap"><div id="tape"><span style="color:var(--dim);padding:4px 20px;">Loading…</span></div></div>
-
-<div id="main">
-  <div id="table-panel">
-    <div class="panel-tabs">
-      <div class="tab active" onclick="setTab('all',this)">ALL</div>
-      <div class="tab" onclick="setTab('winners',this)">▲ WINNERS</div>
-      <div class="tab" onclick="setTab('losers',this)">▼ LOSERS</div>
-      <div class="tab" onclick="setTab('crypto',this)">CRYPTO</div>
-      <div class="tab-spacer"></div>
-      <input id="search-input" type="text" placeholder="Search…" oninput="renderTable()">
-    </div>
-    <div id="table-scroll">
-      <table>
-        <thead><tr>
-          <th onclick="sort('ticker')" id="th-ticker">TICKER</th>
-          <th onclick="sort('price')" id="th-price">PRICE</th>
-          <th onclick="sort('chgPct')" id="th-chgPct">DAY %</th>
-          <th onclick="sort('dayPnl')" id="th-dayPnl">DAY P&amp;L</th>
-          <th onclick="sort('value')" id="th-value">MKT VALUE</th>
-          <th onclick="sort('cost')" id="th-cost">COST BASIS</th>
-          <th onclick="sort('totalPnlPct')" id="th-totalPnlPct">TOTAL RTN</th>
-          <th onclick="sort('totalPnl')" id="th-totalPnl">TOTAL P&amp;L</th>
-          <th onclick="sort('weight')" id="th-weight">WEIGHT</th>
-          <th onclick="sort('qty')" id="th-qty">QTY</th>
-        </tr></thead>
-        <tbody id="tbody"><tr class="loading-row"><td colspan="10">Loading…</td></tr></tbody>
-      </table>
-    </div>
-  </div>
-  <div id="right-panel">
-    <div id="detail"><div class="detail-empty">← Click a row to inspect</div></div>
-    <div id="alloc"><div class="alloc-title">Portfolio Weight</div><div id="alloc-bars"></div></div>
-  </div>
-</div>
-
-<div id="statusbar">
-  <span id="st-stocks">Stocks: —</span>
-  <span class="st-sep">|</span>
-  <span id="st-crypto">Crypto: —</span>
-  <span class="st-sep">|</span>
-  <span id="st-src">Source: Claude AI + web search</span>
-  <span class="st-sep">|</span>
-  <span id="st-next">Next refresh: —</span>
-</div>
-
 <script>
-// ── PORTFOLIO ────────────────────────────────────────────────────
-const PORT = [
-  {ticker:'GOOG',    name:'Alphabet C',       qty:494.00,  cost:75018.4,  isCrypto:false},
-  {ticker:'MA',      name:'Mastercard',        qty:270.00,  cost:136577.8, isCrypto:false},
-  {ticker:'AMAT',    name:'Applied Materials', qty:208.20,  cost:32639.7,  isCrypto:false},
-  {ticker:'ASML',    name:'ASML Holding',      qty:59.73,   cost:41580.6,  isCrypto:false},
-  {ticker:'CNSWF',   name:'Constellation Sw',  qty:53.00,   cost:95523.0,  isCrypto:false},
-  {ticker:'AMZN',    name:'Amazon',            qty:454.00,  cost:93061.8,  isCrypto:false},
-  {ticker:'META',    name:'Meta Platforms',    qty:154.22,  cost:25292.0,  isCrypto:false},
-  {ticker:'MELI',    name:'MercadoLibre',      qty:54.00,   cost:89727.7,  isCrypto:false},
-  {ticker:'MSFT',    name:'Microsoft',         qty:209.53,  cost:78493.5,  isCrypto:false},
-  {ticker:'SHOP',    name:'Shopify',           qty:561.00,  cost:19500.4,  isCrypto:false},
-  {ticker:'AAPL',    name:'Apple',             qty:183.22,  cost:6722.7,   isCrypto:false},
-  {ticker:'BRK-B',   name:'Berkshire B',       qty:96.15,   cost:46674.6,  isCrypto:false},
-  {ticker:'NOW',     name:'ServiceNow',        qty:424.00,  cost:42316.9,  isCrypto:false},
-  {ticker:'ADBE',    name:'Adobe',             qty:187.00,  cost:67614.5,  isCrypto:false},
-  {ticker:'FRFHF',   name:'Fairfax Financial', qty:18.00,   cost:29298.9,  isCrypto:false},
-  {ticker:'UNH',     name:'UnitedHealth',      qty:69.27,   cost:20498.3,  isCrypto:false},
-  {ticker:'SPGI',    name:'S&P Global',        qty:54.06,   cost:24519.4,  isCrypto:false},
-  {ticker:'PLTR',    name:'Palantir',          qty:155.00,  cost:3875.4,   isCrypto:false},
-  {ticker:'MP',      name:'MP Materials',      qty:280.00,  cost:9551.6,   isCrypto:false},
-  {ticker:'BMY',     name:'Bristol-Myers',     qty:268.00,  cost:16492.0,  isCrypto:false},
-  {ticker:'BN',      name:'Brookfield Corp',   qty:300.00,  cost:5880.0,   isCrypto:false},
-  {ticker:'SAP',     name:'SAP SE',            qty:79.88,   cost:8972.3,   isCrypto:false},
-  {ticker:'COIN',    name:'Coinbase',          qty:77.32,   cost:9587.1,   isCrypto:false},
-  {ticker:'CRM',     name:'Salesforce',        qty:56.00,   cost:12189.6,  isCrypto:false},
-  {ticker:'MKL',     name:'Markel',            qty:5.00,    cost:10908.9,  isCrypto:false},
-  {ticker:'NVO',     name:'Novo Nordisk',      qty:185.00,  cost:10607.4,  isCrypto:false},
-  {ticker:'NFLX',    name:'Netflix',           qty:80.00,   cost:2267.3,   isCrypto:false},
-  {ticker:'HOOD',    name:'Robinhood',         qty:26.00,   cost:959.2,    isCrypto:false},
-  {ticker:'DUOL',    name:'Duolingo',          qty:35.00,   cost:6779.9,   isCrypto:false},
-  {ticker:'HIMS',    name:'Hims & Hers',       qty:135.00,  cost:4710.5,   isCrypto:false},
-  {ticker:'CRSP',    name:'CRISPR Tx',         qty:72.00,   cost:3502.4,   isCrypto:false},
-  {ticker:'SMR',     name:'NuScale Power',     qty:325.00,  cost:3276.4,   isCrypto:false},
-  {ticker:'FSELX',   name:'Fid Sel Semi',      qty:29.44,   cost:695.9,    isCrypto:false},
-  {ticker:'TTD',     name:'The Trade Desk',    qty:100.00,  cost:4786.6,   isCrypto:false},
-  {ticker:'WBD',     name:'Warner Bros',       qty:58.81,   cost:1666.4,   isCrypto:false},
-  {ticker:'BTC-USD', name:'Bitcoin',           qty:0.54,    cost:2547.5,   isCrypto:true},
-  {ticker:'ETH-USD', name:'Ethereum',          qty:4.99,    cost:1764.2,   isCrypto:true},
-  {ticker:'DOGE-USD',name:'Dogecoin',          qty:3391.83, cost:135.6,    isCrypto:true},
-  {ticker:'LTC-USD', name:'Litecoin',          qty:4.00,    cost:200.2,    isCrypto:true},
-];
+// 1. UPDATE YOUR PORTFOLIO DATA HERE
+const PORT = [ /* ... keep your existing array ... */ ];
 
-// ── STATE ────────────────────────────────────────────────────────
-let quotes  = {};
-let rows    = [];
-let sortKey = 'value';
-let sortDir = -1;
-let tab     = 'all';
-let selTick = null;
-let busy    = false;
-let nextAt  = null;
-let timer   = null;
-
-// ── CLOCK ────────────────────────────────────────────────────────
-function isMarketOpen() {
-  const now = new Date();
-  const et  = new Date(now.toLocaleString('en-US',{timeZone:'America/New_York'}));
-  const d=et.getDay(), h=et.getHours(), m=et.getMinutes();
-  return d>=1 && d<=5 && (h>9||(h===9&&m>=30)) && h<16;
-}
-function updateClock() {
-  const now   = new Date();
-  const etStr = now.toLocaleString('en-US',{timeZone:'America/New_York',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
-  document.getElementById('clock').textContent = etStr+' ET';
-  const open  = isMarketOpen();
-  const pill  = document.getElementById('market-pill');
-  const dot   = pill.querySelector('.pill-dot');
-  document.getElementById('market-label').textContent = open ? 'MARKET OPEN' : 'MARKET CLOSED';
-  pill.className = open ? 'pill-open' : 'pill-closed';
-  dot.className  = open ? 'pill-dot open-dot' : 'pill-dot closed-dot';
-  if (nextAt) {
-    const s = Math.max(0, Math.round((nextAt - Date.now())/1000));
-    document.getElementById('st-next').textContent = `Next refresh: ${s}s`;
-  }
-}
-setInterval(updateClock, 1000);
-updateClock();
-
-// ── FETCH VIA GOOGLE SHEETS CSV ──────────────────────────────────
+// 2. CSV FETCH FUNCTION
 async function fetchPricesViaCSV() {
-  // PASTE YOUR PUBLISHED CSV URL HERE
-  const csvUrl = 'YOUR_PUBLISHED_CSV_URL_HERE'; 
-  
+  const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQfm6A67NJe2QoohNNNnjww5-n7TLCOGl7-_r08dPN0YzsT6b9SjcOvWfjjwDZTdG6kZikt4c7kfcy0/pub?gid=809910139&single=true&output=csv'; // <--- PUT URL IN QUOTES
   try {
-    const response = await fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vQfm6A67NJe2QoohNNNnjww5-n7TLCOGl7-_r08dPN0YzsT6b9SjcOvWfjjwDZTdG6kZikt4c7kfcy0/pub?gid=809910139&single=true&output=csv');
+    const response = await fetch(csvUrl);
     const csvText = await response.text();
     const rows = csvText.split('\n');
-    
     let loaded = 0;
-    // Start at 1 to skip the header row
+    
+    // We start at 1 to skip the header row
     for (let i = 1; i < rows.length; i++) {
       const cols = rows[i].split(',');
-      if (cols.length < 4) continue;
+      if (cols.length < 2) continue;
       
       const ticker = cols[0].trim();
-      const price = parseFloat(cols[3]); // Assuming Price is in Column D (index 3)
+      const price = parseFloat(cols[1]); // Column B index 1
       
       if (ticker && !isNaN(price)) {
-        quotes[ticker] = {
-          price: price,
-          prevClose: price, 
-          chg: 0,
-          chgPct: 0
-        };
+        quotes[ticker] = { price: price, prevClose: price, chg: 0, chgPct: 0 };
         loaded++;
       }
     }
     return loaded;
   } catch (e) {
-    console.error("Failed to fetch from Google Sheets:", e);
+    console.error("CSV Error:", e);
     return 0;
   }
 }
 
-
-// ── MAIN REFRESH ─────────────────────────────────────────────────
+// 3. UPDATED REFRESH FUNCTION
 async function doRefresh() {
   if (busy) return;
   busy = true;
-  if (timer) clearTimeout(timer);
 
-  const btn  = document.getElementById('refresh-btn');
-  const icon = document.getElementById('spin-icon');
-  btn.disabled = true;
-  icon.classList.add('spinning');
-  document.getElementById('last-update').textContent = 'Fetching…';
-  document.getElementById('ld-sub').textContent = 'Searching live market data…';
   document.getElementById('loading-overlay').classList.remove('hidden');
-
   const oldPrices = {};
   rows.forEach(r => { oldPrices[r.ticker] = r.price; });
 
-  let loaded = 0;
-  try {
-    loaded = await fetchPricesViaAI();
-    document.getElementById('st-stocks').innerHTML = `<span class="${loaded>30?'st-ok':'st-warn'}">Loaded: ${loaded}/${PORT.length}</span>`;
-    document.getElementById('st-crypto').innerHTML = `<span class="st-ok">Source: live web search</span>`;
-  } catch(e) {
-    console.error('Fetch error:', e);
-    document.getElementById('st-stocks').innerHTML = `<span class="st-err">Error: ${e.message.slice(0,40)}</span>`;
-  }
-
+  // CALL THE CSV FUNCTION, NOT THE AI ONE
+  let loaded = await fetchPricesViaCSV();
+  
+  document.getElementById('st-stocks').innerHTML = `<span class="st-ok">Loaded: ${loaded} holdings</span>`;
+  document.getElementById('st-crypto').innerHTML = `<span class="st-ok">Source: Google Sheets</span>`;
   document.getElementById('loading-overlay').classList.add('hidden');
 
   buildRows(oldPrices);
   renderAll();
-
-  const now = new Date();
-  document.getElementById('last-update').textContent =
-    'Updated '+now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true});
-
-  btn.disabled = false;
-  icon.classList.remove('spinning');
   busy = false;
-
-  // Auto-refresh: 2min if open, 10min if closed
-  const delay = isMarketOpen() ? 120000 : 600000;
-  nextAt = Date.now() + delay;
-  timer  = setTimeout(doRefresh, delay);
 }
 
-// ── BUILD ROWS ───────────────────────────────────────────────────
-function buildRows(oldPrices = {}) {
-  let totalValue = 0;
-  rows = PORT.map(p => {
-    const q        = quotes[p.ticker];
-    const price    = q?.price    || 0;
-    const chgPct   = q?.chgPct   || 0;
-    const chg      = q?.chg      || 0;
-    const value    = price * p.qty;
-    const dayPnl   = chg   * p.qty;
-    const totalPnl = value - p.cost;
-    const totalPnlPct = p.cost ? totalPnl/p.cost*100 : 0;
-    totalValue += value;
-    return {
-      ticker:p.ticker, name:p.name, qty:p.qty,
-      cost:p.cost, price, chgPct, chg, value, dayPnl,
-      totalPnl, totalPnlPct, isCrypto:p.isCrypto,
-      loaded:!!q, weight:0,
-      priceUp: q && price > (oldPrices[p.ticker]||0),
-      priceDn: q && price < (oldPrices[p.ticker]||0),
-    };
-  });
-  rows.forEach(r => r.weight = totalValue ? r.value/totalValue*100 : 0);
-}
-
-// ── RENDER ALL ───────────────────────────────────────────────────
-function renderAll() { renderSummary(); renderTable(); renderTape(); renderAlloc(); if(selTick) showDetail(selTick); }
-
-// ── SUMMARY ──────────────────────────────────────────────────────
-function renderSummary() {
-  const tv  = rows.reduce((s,r)=>s+r.value,0);
-  const tc  = rows.reduce((s,r)=>s+r.cost,0);
-  const tp  = tv-tc, tpp = tc?tp/tc*100:0;
-  const dp  = rows.reduce((s,r)=>s+r.dayPnl,0);
-  const dpp = (tv-dp)?(dp/(tv-dp)*100):0;
-  const w   = rows.filter(r=>r.loaded&&r.chgPct>0).length;
-  const l   = rows.filter(r=>r.loaded&&r.chgPct<0).length;
-  const $K  = v=>'$'+Math.abs(v).toLocaleString('en-US',{maximumFractionDigits:0});
-  const pct = v=>(v>=0?'+':'')+v.toFixed(2)+'%';
-  const cls = v=>v>=0?'pos':'neg';
-  set('sv-value','$'+tv.toLocaleString('en-US',{maximumFractionDigits:0}));
-  set('sv-cost','Cost: '+$K(tc));
-  setC('sv-daypnl',(dp>=0?'+':'-')+$K(dp),cls(dp));
-  setC('sv-daypct',pct(dpp),cls(dp));
-  setC('sv-totalpnl',(tp>=0?'+':'-')+$K(tp),cls(tp));
-  setC('sv-totalpct',pct(tpp),cls(tp));
-  set('sv-win',w+''); set('sv-lose',l+'');
-}
-function set(id,v){document.getElementById(id).textContent=v;}
-function setC(id,v,c){const el=document.getElementById(id);el.textContent=v;el.className='sum-value '+c;}
-
-// ── TAPE ─────────────────────────────────────────────────────────
-function renderTape() {
-  const top = [...rows].filter(r=>r.price>0).sort((a,b)=>b.value-a.value).slice(0,22);
-  const mk  = r => {
-    const c=r.chgPct>=0?'pos':'neg', s=r.chgPct>=0?'+':'';
-    const px=r.price>=100?r.price.toFixed(2):r.price.toFixed(4);
-    return `<span class="ti"><span class="ti-sym">${r.ticker}</span><span class="ti-px">$${px}</span><span class="ti-chg ${c}">${s}${r.chgPct.toFixed(2)}%</span></span>`;
-  };
-  const items=[...top,...top].map(mk).join('');
-  document.getElementById('tape').innerHTML=items||'<span style="color:var(--dim);padding:4px 20px;">No data</span>';
-}
-
-// ── TABLE ────────────────────────────────────────────────────────
-function setTab(t,el){tab=t;document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));el.classList.add('active');renderTable();}
-function sort(key){
-  if(sortKey===key)sortDir*=-1;else{sortKey=key;sortDir=-1;}
-  document.querySelectorAll('thead th').forEach(th=>{th.classList.remove('sort-asc','sort-desc');if(th.id==='th-'+key)th.classList.add(sortDir===1?'sort-asc':'sort-desc');});
-  renderTable();
-}
-function renderTable() {
-  const filter=document.getElementById('search-input').value.toUpperCase().trim();
-  let data=[...rows];
-  if(tab==='winners')data=data.filter(r=>r.chgPct>0);
-  if(tab==='losers') data=data.filter(r=>r.chgPct<0);
-  if(tab==='crypto') data=data.filter(r=>r.isCrypto);
-  if(filter)data=data.filter(r=>r.ticker.includes(filter)||r.name.toUpperCase().includes(filter));
-  data.sort((a,b)=>{const av=a[sortKey]??0,bv=b[sortKey]??0;return typeof av==='string'?sortDir*av.localeCompare(bv):sortDir*(av-bv);});
-
-  const mxP=Math.max(...rows.map(r=>Math.abs(r.totalPnl)),1);
-  const $K =v=>'$'+Math.abs(v).toLocaleString('en-US',{maximumFractionDigits:0});
-  const pct=v=>(v>=0?'+':'')+v.toFixed(2)+'%';
-  const cls=v=>v>=0?'pos':'neg';
-  const px =v=>v>=100?'$'+v.toFixed(2):'$'+v.toFixed(4);
-  const bw =v=>(Math.abs(v)/mxP*50).toFixed(1);
-  const bc =v=>v>=0?'var(--green)':'var(--red)';
-
-  const html=data.map(r=>{
-    const sel=r.ticker===selTick?'selected':'';
-    const fl =r.priceUp?'flash-g':r.priceDn?'flash-r':'';
-    return `<tr class="${sel} ${fl}" onclick="showDetail('${r.ticker}')">
-      <td><div><div class="sym">${r.ticker}</div><div class="sname">${r.name}</div></div></td>
-      <td>${r.loaded?px(r.price):'<span class="dimtxt">—</span>'}</td>
-      <td>${r.loaded?`<span class="${cls(r.chgPct)}">${pct(r.chgPct)}</span>`:'<span class="dimtxt">—</span>'}</td>
-      <td>${r.loaded?`<span class="${cls(r.dayPnl)}">${(r.dayPnl>=0?'+':'-')+$K(r.dayPnl)}</span>`:'<span class="dimtxt">—</span>'}</td>
-      <td>${r.loaded?$K(r.value):'<span class="dimtxt">—</span>'}</td>
-      <td class="neu">${$K(r.cost)}</td>
-      <td>${r.loaded?`<span class="${cls(r.totalPnlPct)}">${pct(r.totalPnlPct)}</span>`:'<span class="dimtxt">—</span>'}</td>
-      <td>${r.loaded?`<div class="bar-wrap"><span class="${cls(r.totalPnl)}">${(r.totalPnl>=0?'+':'-')+$K(r.totalPnl)}</span><div class="pnl-bar" style="width:${bw(r.totalPnl)}px;background:${bc(r.totalPnl)}"></div></div>`:'<span class="dimtxt">—</span>'}</td>
-      <td class="neu">${r.weight?r.weight.toFixed(2)+'%':'—'}</td>
-      <td class="dimtxt">${r.qty.toLocaleString()}</td>
-    </tr>`;
-  }).join('');
-  document.getElementById('tbody').innerHTML=html||'<tr class="loading-row"><td colspan="10">No matches</td></tr>';
-}
-
-// ── DETAIL ───────────────────────────────────────────────────────
-function showDetail(ticker){
-  selTick=ticker;
-  document.querySelectorAll('tbody tr').forEach(tr=>{const s=tr.querySelector('.sym');tr.classList.toggle('selected',s?.textContent===ticker);});
-  const r=rows.find(x=>x.ticker===ticker);
-  if(!r)return;
-  const cls=v=>v>=0?'pos':'neg';
-  const $ =v=>'$'+Math.abs(v).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
-  const pct=v=>(v>=0?'+':'')+v.toFixed(2)+'%';
-  const px =r.price>=100?r.price.toFixed(2):r.price.toFixed(4);
-  document.getElementById('detail').innerHTML=`
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
-      <div><div class="det-sym">${r.ticker}</div><div class="det-name">${r.name}</div></div>
-      <div><div class="det-price">${r.loaded?'$'+px:'—'}</div><div class="det-chg ${cls(r.chgPct)}">${r.loaded?pct(r.chgPct)+' today':'No data'}</div></div>
-    </div>
-    <hr class="det-div">
-    <div class="det-grid">
-      <div class="det-item"><div class="dl">Mkt Value</div><div class="dv">${r.loaded?$(r.value):'—'}</div></div>
-      <div class="det-item"><div class="dl">Cost Basis</div><div class="dv">${$(r.cost)}</div></div>
-      <div class="det-item"><div class="dl">Total P&amp;L</div><div class="dv ${cls(r.totalPnl)}">${r.loaded?(r.totalPnl>=0?'+':'-')+$(r.totalPnl):'—'}</div></div>
-      <div class="det-item"><div class="dl">Total Return</div><div class="dv ${cls(r.totalPnlPct)}">${r.loaded?pct(r.totalPnlPct):'—'}</div></div>
-      <div class="det-item"><div class="dl">Day P&amp;L</div><div class="dv ${cls(r.dayPnl)}">${r.loaded?(r.dayPnl>=0?'+':'-')+$(r.dayPnl):'—'}</div></div>
-      <div class="det-item"><div class="dl">Avg Cost/Sh</div><div class="dv">$${(r.cost/r.qty).toFixed(2)}</div></div>
-      <div class="det-item"><div class="dl">Quantity</div><div class="dv">${r.qty.toLocaleString()}</div></div>
-      <div class="det-item"><div class="dl">Weight</div><div class="dv">${r.weight?r.weight.toFixed(2)+'%':'—'}</div></div>
-    </div>`;
-}
-
-// ── ALLOCATION ───────────────────────────────────────────────────
-function renderAlloc(){
-  const C=['#f0a500','#2a7fff','#00d492','#ff3d5a','#9d6fff','#34d399','#fb923c','#60a5fa','#f472b6','#facc15','#38bdf8','#4ade80','#f87171','#c084fc','#fbbf24'];
-  const top=[...rows].filter(r=>r.value>0).sort((a,b)=>b.value-a.value).slice(0,15);
-  document.getElementById('alloc-bars').innerHTML=top.map((r,i)=>`
-    <div class="alloc-row">
-      <span class="alloc-sym">${r.ticker}</span>
-      <div class="alloc-track"><div class="alloc-fill" style="width:${r.weight}%;background:${C[i%C.length]}"></div></div>
-      <span class="alloc-pct">${r.weight.toFixed(1)}%</span>
-    </div>`).join('');
-}
-
-// ── INIT ─────────────────────────────────────────────────────────
+// ... (Keep all your other functions: buildRows, renderAll, renderSummary, etc.) ...
 doRefresh();
 </script>
 </body>
